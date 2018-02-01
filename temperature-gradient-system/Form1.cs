@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using XControl;
 using SerieslizeControlModule;
+using PID_WinForm;
 
 namespace temperature_gradient_system
 {
@@ -243,358 +244,172 @@ namespace temperature_gradient_system
             }
         }
 
+        private double temperatureValue_1;
+
+
+
+
+
+        /// <summary>
+        /// 控制温度升降
+        /// </summary>
+        /// <param name="groupNumber">from 1 to 8</param>
+        private void TUp(int groupNumber)
+        {
+            switch (groupNumber)
+            {
+                case 1:
+                    pc.DigitOutput(1, MccDaq.DigitalLogicState.Low);
+                    pc.DigitOutput(0, MccDaq.DigitalLogicState.High);
+                    break;
+                case 2:
+                    pc.DigitOutput(3, MccDaq.DigitalLogicState.Low);
+                    pc.DigitOutput(2, MccDaq.DigitalLogicState.High);
+                    break;
+                
+            }
+
+        }
+
+
+        /// <summary>
+        /// 控制温度下降 
+        /// </summary>
+        /// <param name="groupNumber">protNumber form 1 to 8</param>
+        public void TDown(int groupNumber)
+        {
+
+            switch (groupNumber)
+            {
+                case 1:
+                    pc.DigitOutput(1, MccDaq.DigitalLogicState.Low);
+                    pc.DigitOutput(0, MccDaq.DigitalLogicState.Low);
+                    break;
+                case 2:
+                    pc.DigitOutput(3, MccDaq.DigitalLogicState.Low);
+                    pc.DigitOutput(2, MccDaq.DigitalLogicState.Low);
+                    break;
+             
+            }
+
+        }
+
+        /// <summary>
+        /// 将端口清0，不控制温度升降，让其处于自然状态
+        /// when PortINH form 9 to 23 is low
+        /// the temperature will not control by computer
+        /// </summary>
+        /// <param name="groupNumber">port number</param>
+        public void TNature(int groupNumber)
+        {
+
+            switch (groupNumber)
+            {
+                case 1:
+                    pc.DigitOutput(1, MccDaq.DigitalLogicState.High);
+                   
+                    break;
+                case 2:
+                    pc.DigitOutput(3, MccDaq.DigitalLogicState.High);
+                    
+                    break;
+                
+
+            }
+
+        }
+
+
+
+
+
+        private bool isUp_1;
+        private bool startPID_1;
+        private bool isStartPID_1;
+        private PIDControl PID_1;
+        private double result_1;
+        private int FirstProporation_1;
+        private int proporation_1;
+        private int circle;
+        private int PID_Count_1;
+
+
+        private bool isUp_2;
+        private bool startPID_2;
+        private bool isStartPID_2;
+        private PIDControl PID_2;
+        private double result_2;
+        private int FirstProporation_2;
+        private int proporation_2;
+        private int PID_Count_2;
+
+
+
+
         private void timer2_Tick(object sender, EventArgs e)
         {
-            //digitalControlSingal_1 = GC.getSingal(1);
-            //lblTState_1.Text = digitalControlSingal_1 == 1 ? "On" : "OFF";
-            System.Diagnostics.Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();      //  开始监视代码运行时间
-
+           
             /*
              * time get module
              */
 
             int RawValue;
-            temperatureValue_1 = Board_1.getT(1, out RawValue);
-            lblRawData_1.Text = RawValue.ToString();
-            lblTValue_1.Text = temperatureValue_1.ToString("00.00");
+            int rawData_1 = int.Parse(pc.AnalogInput(0));
+            
+           
+            temperatureValue_1 = rawData_1 * a_1 + b_1;
 
-            if (isExecutePIDModel_1 == true || isExecutePIDModelDown_1 == true)
-            {
-                lblPIDTValue_1.Text = temperatureValue_1.ToString("00.00");
-            }
+            lblRawValue_1.Text = rawData_1.ToString();
+            lblT_1.Text = temperatureValue_1.ToString("00.00");
 
-            /*
-             * Test by hand module
-             */
-            if (isTestByHand_1 == false)
-            {
-                digitalControlSingal_1 = Board_2.getSingal(1);
+            int rawData_3 = int.Parse(pc.AnalogInput(2));
 
-            }
+
+            double temperatureValue_3 = rawData_3 * a_3 + b_3;
+
+            lblRawValue_3.Text = rawData_3.ToString();
+            lblT_3.Text = temperatureValue_3.ToString("00.00");
+
 
             if (temperatureValue_1 > 60 || temperatureValue_1 < 0)
             {
-                Board_1.TNature(1);
-                timer_1.Stop();
-                lblTState_1.Text = "Error";
+                TNature(1);
+                tControl_1.Stop();
+                MessageBox.Show("Temperature Out");
             }
 
             /*
              *  Up and Down control module
              */
-            if (isExecuteControlModel_1 == true)
-            {
-
-
-                if (digitalControlSingal_1 == 1 && isFirstChangeUp_1 == true)
-                {
-
-
-
-                    lblTState_1.Text = "On";
-                    UpDownSing_1 = 1;
-                    punishmentT = float.Parse(tbPunishTValue.Text);
-                    confortableT = float.Parse(tbConfortTValue.Text);
-
-                    isFirstChangeUp_1 = false;
-                    isFirstChangeDown_1 = true;
-                    isUp_1 = true;
-                    isDown_1 = false;
-
-                    isStartPID_1 = true;
-                    PID_Count_1 = 0;
-
-                    //isFirstPor = true;
-                    Board_1.TUp(1);
-                    startPID_1 = false;
-                    circle = 10;
-                    if (isExecutePIDModelDown_1)
-                    {
-                        PID_1 = new PIDControl(P_1, D_1, I_1, punishmentT);
-
-                    }
-                    else
-                    {
-                        PID_1 = new PIDControl(Kp_up_1, Ki_up_1, Kd_up_1, punishmentT);
-
-                    }
-
-
-                    System.IO.File.AppendAllText("e:\\result_1.txt", "惩罚：" + "Kp:" + Kp_up_1.ToString() + "  Ki" + Ki_up_1.ToString() + "  Kd" + Kp_up_1.ToString() + "\r\n");
-                }
-                else if (digitalControlSingal_1 == 0 && isFirstChangeDown_1 == true)
-                {
-                    punishmentT = float.Parse(tbPunishTValue.Text);
-                    confortableT = float.Parse(tbConfortTValue.Text);
-
-                    isDown_1 = true;
-                    isStartPID_1 = true;
-
-                    isFirstChangeDown_1 = false;
-                    isFirstChangeUp_1 = true;
-
-                    startPID_1 = false;
-                    isUp_1 = false;
-                    PID_Count_1 = 0;
-                    lblTState_1.Text = "Off";
-                    UpDownSing_1 = -1;
-                    Board_1.TDown(1);
-                    circle = 10;
-                    if (isExecutePIDModel_1)
-                    {
-                        PID_1 = new PIDControl(P_1, D_1, I_1, confortableT);
-
-                    }
-                    else
-                    {
-                        PID_1 = new PIDControl(Kp_down_1, Ki_down_1, Kd_down_1, confortableT);
-
-                    }
-
-                    System.IO.File.AppendAllText("e:\\result_1.txt", "舒适：" + "Kp:" + Kp_down_1.ToString() + "  Ki" + Ki_down_1.ToString() + "  Kd" + Kp_down_1.ToString() + "\r\n");
-                }
-                else
-                {
-                    ;
-                }
-            }
-
-
-
-
-            /*
-             * PID paramete test module
-             */
-
-            if (isExecutePIDModel_1 == true)
-            {
-                timerCount_1++;
-
-                if (timerCount_1 == 300 && highBalance_1 == true)
-                {
-                    timerCount_1 = 0;
-                    digitalControlSingal_1 = 0;
-                    highBalance_1 = false;
-                    downLine_1 = true;
-
-                }
-
-                if (timerCount_1 == 150 && downLine_1)
-                {
-                    //System.IO.File.AppendAllText("e:\\result_1.txt", "舒适：" + "Kp:" + 8 + "  Ki" + 0 + "  Kd" + 3 + "\r\n");
-                    isChangeParam_1 = true;
-                    downLine_1 = false;
-                    timeNotAccept_1 = true;
-
-                }
-
-                if (temperatureValue_1 - confortableT <= 0.5 && downLine_1 == true)
-                {
-                    beyondNum_1++;
-                    if (beyondNum_1 == 3)
-                    {
-
-
-                        timeResult_1 = timerCount_1;
-                        timerCount_1 = 0;
-                        downLine_1 = false;
-                        longKeep_1 = true;
-                        beyondNum_1 = 0;
-
-                    }
-                }
-
-                if (longKeep_1 == true)
-                {
-                    tempCollection_1.Add(temperatureValue_1);
-                    if (timerCount_1 == 300)
-                    {
-                        isChangeParam_1 = true;
-                        longKeep_1 = false;
-                    }
-
-                }
-
-
-
-
-
-
-                if (isChangeParam_1)
-                {
-
-                    //  lblPIDDebug.Text = isExecutePIDModel_1.ToString();
-                    if (timeNotAccept_1)
-                    {
-                        lblPIDTestStatus_1.Text = (string.Format("P:{0},I:{1},D{2}--时间超出", P_1, I_1, D_1));
-                        //System.IO.File.AppendAllText("e:\\result_1.txt", P_1 + "   " + I_1 + "   " + D_1 + "   " + "Tout" + "\r\n");
-                        //输出PID 时间超出，舍弃参数
-
-                    }
-                    else
-                    {
-                        string PID_Result_1;
-                        resultAnalyse(tempCollection_1, P_1, I_1, D_1, out PID_Result_1, 1);
-                        tempCollection_1.Clear();
-                        lblPIDTestStatus_1.Text = PID_Result_1;
-                        //执行计算，然后输出
-                    }
-                    if (D_1 == 3)
-                    {
-                        timer_1.Stop();
-                        Board_1.clearALL();
-                        lblPIDTestStatus_1.Text = "finished!";
-                    }
-
-                    digitalControlSingal_1 = 1;
-                    isChangeParam_1 = false;
-                    P_1 += 0.5;
-
-                    if (P_1 == 10)
-                    {
-                        D_1 += 0.5;
-                        P_1 = 0.5;
-                    }
-
-
-                    timerCount_1 = 0;
-                    beyondNum_1 = 0;
-                    highBalance_1 = true;
-                }
-
-            }
-
-
-
-
-
-            /*
-             * PID paramete test module
-             */
-
-            if (isExecutePIDModelDown_1 == true)
-            {
-                timerCount_1++;
-
-                if (timerCount_1 == 300 && lowBalance_1 == true)
-                {
-                    timerCount_1 = 0;
-                    digitalControlSingal_1 = 1;
-                    lowBalance_1 = false;
-                    upLine_1 = true;
-
-                }
-
-                if (timerCount_1 == 100 && upLine_1)
-                {
-                    //System.IO.File.AppendAllText("e:\\result_1.txt", "舒适：" + "Kp:" + 8 + "  Ki" + 0 + "  Kd" + 3 + "\r\n");
-                    isChangeParam_1 = true;
-                    upLine_1 = false;
-                    timeNotAccept_1 = true;
-
-
-                }
-
-                if (punishmentT - temperatureValue_1 <= 0.5 && upLine_1 == true)
-                {
-                    beyondNum_1++;
-                    if (beyondNum_1 == 3)
-                    {
-                        timeResult_1 = timerCount_1;
-                        timerCount_1 = 0;
-                        upLine_1 = false;
-                        longKeep_1 = true;
-                        beyondNum_1 = 0;
-
-                    }
-                }
-
-                if (longKeep_1 == true)
-                {
-                    tempCollection_1.Add(temperatureValue_1);
-                    if (timerCount_1 == 300)
-                    {
-                        isChangeParam_1 = true;
-                        longKeep_1 = false;
-                    }
-
-                }
-
-
-
-
-
-
-                if (isChangeParam_1)
-                {
-
-                    if (timeNotAccept_1)
-                    {
-                        lblPIDTestStatus_1.Text = (string.Format("P:{0},I:{1},D{2}--时间超出", P_1, I_1, D_1));
-                        //System.IO.File.AppendAllText("e:\\result_1.txt", P_1 + "   " + I_1 + "   " + D_1 + "   " + "Tout" + "\r\n");
-                        //输出PID 时间超出，舍弃参数
-                    }
-                    else
-                    {
-                        string PID_Result_1;
-                        resultAnalyse(tempCollection_1, P_1, I_1, D_1, out PID_Result_1, 1);
-                        tempCollection_1.Clear();
-                        lblPIDTestStatus_1.Text = PID_Result_1;
-                        //执行计算，然后输出
-                    }
-                    if (D_1 == 10)
-                    {
-                        timer_1.Stop();
-                        Board_1.clearALL();
-                        lblPIDTestStatus_1.Text = "Finished!";
-                    }
-
-                    digitalControlSingal_1 = 0;
-                    isChangeParam_1 = false;
-                    P_1 += 0.5;
-                    if (P_1 == 10)
-                    {
-                        D_1 += 0.5;
-                        P_1 = 0.5;
-                    }
-
-
-                    timerCount_1 = 0;
-                    beyondNum_1 = 0;
-                    lowBalance_1 = true;
-                }
-
-            }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+             
 
             if (isUp_1 == true)
             {
-                if ((punishmentT - temperatureValue_1) < 10 && isStartPID_1 == true)
+                if (Math.Abs(desT_1 - temperatureValue_1) < 10 && isStartPID_1 == true)
                 {
                     startPID_1 = true;
                     isStartPID_1 = false;
 
                     result_1 = PID_1.PIDCalcDirect(temperatureValue_1);
-                    FirstProportion_1 = Convert.ToInt32(result_1);
-                    proportion_1 = Convert.ToInt32(result_1);
-                    proportion_1 = PID_1.ConvertAccordToPropotation(proportion_1, circle, FirstProportion_1);
+
+                    if (result_1 > 0)
+                    {
+
+                        TUp(1);
+
+                    }
+                    else
+                    {
+                        TDown(1);
+                    }
+
+
+                    FirstProporation_1 = Convert.ToInt32(result_1);
+                    proporation_1 = Convert.ToInt32(result_1);
+                    proporation_1 = PID_1.ConvertAccordToPropotation(proporation_1, circle, FirstProporation_1);
 
                     PID_Count_1 = 0;
-                    Board_1.TUp(1);
+                    
 
 
                 }
@@ -603,9 +418,9 @@ namespace temperature_gradient_system
 
 
 
-                if (PID_Count_1 == proportion_1 && startPID_1 == true)
+                if (PID_Count_1 == proporation_1 && startPID_1 == true)
                 {
-                    Board_1.TNature(1);
+                    TNature(1);
                 }
 
 
@@ -620,7 +435,7 @@ namespace temperature_gradient_system
                 {
                     result_1 = PID_1.PIDCalcDirect(temperatureValue_1);
 
-                    proportion_1 = Convert.ToInt32(result_1);
+                    proporation_1 = Convert.ToInt32(result_1);
                     PID_Count_1 = 0;
 
 
@@ -628,90 +443,272 @@ namespace temperature_gradient_system
                     if (result_1 > 0)
                     {
 
-                        Board_1.TUp(1);
+                        TUp(1);
 
                     }
                     else
                     {
-                        Board_1.TDown(1);
+                        TDown(1);
                     }
 
-                    proportion_1 = PID_1.ConvertAccordToPropotation(proportion_1, circle, FirstProportion_1);
+                    proporation_1 = PID_1.ConvertAccordToPropotation(proporation_1, circle, FirstProporation_1);
 
                 }
 
-                if (!isExecuteControlModel_1 || !isExecutePIDModelDown_1)
-                {
-                    System.IO.File.AppendAllText("e:\\result_1.txt", temperatureValue_1.ToString("00.00") + "   " + UpDownSing_1.ToString() + "\r\n");
-                }
+
             }
 
 
-            if (isDown_1 == true)
-            {
-                if ((temperatureValue_1 - confortableT) < 5 && isStartPID_1 == true)
-                {
-                    startPID_1 = true;
-                    isStartPID_1 = false;
-
-                    result_1 = PID_1.PIDCalcDirect(temperatureValue_1);
-                    FirstProportion_1 = Convert.ToInt32(result_1);
-                    proportion_1 = Convert.ToInt32(result_1);
-                    proportion_1 = PID_1.ConvertAccordToPropotation(proportion_1, circle, FirstProportion_1);
-                    PID_Count_1 = 0;
-                    Board_1.TDown(1);
-
-                }
+            
 
 
-
-
-
-                if (PID_Count_1 == proportion_1 && startPID_1 == true)
-                {
-                    Board_1.TNature(1);
-                }
-
-                if (startPID_1 == true)
-                {
-                    PID_Count_1++;
-
-                }
-
-                if (startPID_1 == true && PID_Count_1 == circle)
-                {
-                    double result_1 = PID_1.PIDCalcDirect(temperatureValue_1);
-                    proportion_1 = Convert.ToInt32(result_1);
-                    PID_Count_1 = 0;
-                    if (result_1 > 0)
-                    {
-                        Board_1.TUp(1);
-                    }
-                    else
-                    {
-                        Board_1.TDown(1);
-                    }
-
-                    proportion_1 = PID_1.ConvertAccordToPropotation(proportion_1, circle, FirstProportion_1);
-
-
-                }
-                if (!isExecuteControlModel_1 || !isExecutePIDModelDown_1)
-                {
-                    System.IO.File.AppendAllText("e:\\result_1.txt", temperatureValue_1.ToString("00.00") + "   " + UpDownSing_1.ToString() + "\r\n");
-                }
-            }
-
-            stopwatch.Stop(); //  停止监视
-
-            TimeSpan timespan = stopwatch.Elapsed;
-
-            lblExecuteTimeInPID.Text = timespan.TotalMilliseconds.ToString();  //  总毫秒数
         }
+
+        private bool ifStart_1 = false;
+        private bool ifStart_2 = false;
 
         private void btnStart_1_Click(object sender, EventArgs e)
         {
+            if (ifStart_1)
+            {
+                this.btnStart_1.Text = "Start";
 
+                ifStart_1 = false;
+                this.tControl_1.Interval = 10;
+
+                TNature(1);
+
+                isUp_1 = false;
+            }
+            else
+            {
+                this.btnStart_1.Text = "Stop";
+                ifStart_1 = true;
+
+
+
+                isStartPID_1 = true;
+                
+                PID_Count_1 = 0;
+
+                //isFirstPor = true;
+                
+                startPID_1 = false;
+                circle = 10;
+                
+
+                
+                this.desT_1 = double.Parse(tbDesT_1.Text);
+                double rawData_1 = double.Parse(pc.AnalogInput(0))*a_1+b_1;
+                if (rawData_1 > desT_1)
+                {
+                    TDown(1);
+                }
+                else
+                {
+                   TUp(1);
+                }
+
+                isUp_1 = true;
+            }
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            TUp(1);
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            TDown(1);
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            TNature(1);
+        }
+
+        private void button5_Click_1(object sender, EventArgs e)
+        {
+            TUp(1);
+        }
+
+        private void button6_Click_1(object sender, EventArgs e)
+        {
+            TDown(1);
+        }
+
+        private void button7_Click_1(object sender, EventArgs e)
+        {
+            TNature(1);
+        }
+
+        private void timer3_Tick(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label11_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click_3(object sender, EventArgs e)
+        {
+            if (ifStart_2)
+            {
+                this.btnStart_2.Text = "Start";
+
+                ifStart_2 = false;
+                this.tControl_2.Interval = 10;
+
+                TNature(2);
+
+                isUp_2 = false;
+            }
+            else
+            {
+                this.btnStart_2.Text = "Stop";
+                ifStart_2 = true;
+
+
+
+                isStartPID_2 = true;
+
+                PID_Count_2 = 0;
+
+                //isFirstPor = true;
+
+                startPID_2 = false;
+                circle = 10;
+
+
+
+                this.desT_2 = double.Parse(tbDesT_2.Text);
+                double rawData_2 = double.Parse(pc.AnalogInput(1)) * a_2 + b_2;
+                if (rawData_2 > desT_2)
+                {
+                    TDown(2);
+                }
+                else
+                {
+                    TUp(2);
+                }
+
+                isUp_2 = true;
+            }
+        }
+
+        private void tControl_2_Tick(object sender, EventArgs e)
+        {
+            /*
+            * time get module
+            */
+
+            int RawValue;
+            int rawData_2 = int.Parse(pc.AnalogInput(1));
+
+
+            double temperatureValue_2 = rawData_2 * a_2 + b_2;
+
+            lblRawValue_2.Text = rawData_2.ToString();
+            lblT_2.Text = temperatureValue_2.ToString("00.00");
+
+            int rawData_4 = int.Parse(pc.AnalogInput(3));
+
+
+            double temperatureValue_4 = rawData_4 * a_4 + b_4;
+
+            lblRawValue_4.Text = rawData_4.ToString();
+            lblT_3.Text = temperatureValue_4.ToString("00.00");
+
+
+            if (temperatureValue_1 > 60 || temperatureValue_1 < 0)
+            {
+                TNature(2);
+                tControl_2.Stop();
+                MessageBox.Show("Temperature Out");
+            }
+
+            /*
+             *  Up and Down control module
+             */
+
+
+            if (isUp_2 == true)
+            {
+                if (Math.Abs(desT_2 - temperatureValue_2) < 10 && isStartPID_2 == true)
+                {
+                    startPID_2 = true;
+                    isStartPID_2 = false;
+
+                    result_2 = PID_2.PIDCalcDirect(temperatureValue_2);
+
+                    if (result_2 > 0)
+                    {
+
+                        TUp(2);
+
+                    }
+                    else
+                    {
+                        TDown(2);
+                    }
+
+
+                    FirstProporation_2 = Convert.ToInt32(result_2);
+                    proporation_2 = Convert.ToInt32(result_2);
+                    proporation_2 = PID_2.ConvertAccordToPropotation(proporation_2, circle, FirstProporation_2);
+
+                    PID_Count_2 = 0;
+
+
+
+                }
+
+
+
+
+
+                if (PID_Count_2 == proporation_2 && startPID_2 == true)
+                {
+                    TNature(2);
+                }
+
+
+                if (startPID_2 == true)
+                {
+                    PID_Count_2++;
+
+                }
+
+
+                if (startPID_2 == true && PID_Count_2 == circle)
+                {
+                    result_2 = PID_2.PIDCalcDirect(temperatureValue_2);
+
+                    proporation_2 = Convert.ToInt32(result_2);
+                    PID_Count_2 = 0;
+
+
+
+                    if (result_2 > 0)
+                    {
+
+                        TUp(2);
+
+                    }
+                    else
+                    {
+                        TDown(2);
+                    }
+
+                    proporation_2 = PID_2.ConvertAccordToPropotation(proporation_2, circle, FirstProporation_2);
+
+                }
+
+
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -789,18 +786,19 @@ namespace temperature_gradient_system
 
                 ifStart = false;
 
-                timer2.Stop();
+                tControl_1.Stop();
+                tControl_2.Stop();
             }
             else
             {
                 this.btnStart.Text = "Stop";
                 ifStart = true;
-                this.desT_1 = double.Parse(tbDesT_1.Text);
-                this.desT_2 = double.Parse(tbDesT_2.Text);
-                this.desT_3 = double.Parse(tbDesT_3.Text);
-                this.desT_4 = double.Parse(tbDesT_4.Text);
-                timer2.Interval = 100;
-                timer2.Start();
+                
+                
+                tControl_1.Interval = 10;
+                tControl_2.Interval = 10;
+                tControl_2.Start();
+                tControl_1.Start();
             }
         }
 
