@@ -228,7 +228,7 @@ namespace temperature_gradient_system
         {
             if (ifStart)
             {
-                this.btnStart.Text = "Start";
+                this.btnStartTFit.Text = "Start";
 
                 ifStart = false;
 
@@ -236,7 +236,7 @@ namespace temperature_gradient_system
             }
             else
             {
-                this.btnStart.Text = "Stop";
+                this.btnStartTFit.Text = "Stop";
                 ifStart = true;
 
                 timer1.Interval = 100;
@@ -260,11 +260,12 @@ namespace temperature_gradient_system
             {
                 case 1:
                     pc.DigitOutput(1, MccDaq.DigitalLogicState.Low);
-                    pc.DigitOutput(0, MccDaq.DigitalLogicState.High);
+                    pc.DigitOutput(0, MccDaq.DigitalLogicState.Low);
                     break;
                 case 2:
                     pc.DigitOutput(3, MccDaq.DigitalLogicState.Low);
-                    pc.DigitOutput(2, MccDaq.DigitalLogicState.High);
+                    pc.DigitOutput(2, MccDaq.DigitalLogicState.Low);
+                    
                     break;
                 
             }
@@ -283,11 +284,11 @@ namespace temperature_gradient_system
             {
                 case 1:
                     pc.DigitOutput(1, MccDaq.DigitalLogicState.Low);
-                    pc.DigitOutput(0, MccDaq.DigitalLogicState.Low);
+                    pc.DigitOutput(0, MccDaq.DigitalLogicState.High);
                     break;
                 case 2:
                     pc.DigitOutput(3, MccDaq.DigitalLogicState.Low);
-                    pc.DigitOutput(2, MccDaq.DigitalLogicState.Low);
+                    pc.DigitOutput(2, MccDaq.DigitalLogicState.High);
                     break;
              
             }
@@ -357,7 +358,7 @@ namespace temperature_gradient_system
             int rawData_1 = int.Parse(pc.AnalogInput(0));
             
            
-            temperatureValue_1 = rawData_1 * a_1 + b_1;
+            double temperatureValue_1 = rawData_1 * a_1 + b_1;
 
             lblRawValue_1.Text = rawData_1.ToString();
             lblT_1.Text = temperatureValue_1.ToString("00.00");
@@ -496,7 +497,7 @@ namespace temperature_gradient_system
                 startPID_1 = false;
                 circle = 10;
                 
-
+                
                 
                 this.desT_1 = double.Parse(tbDesT_1.Text);
                 double rawData_1 = double.Parse(pc.AnalogInput(0))*a_1+b_1;
@@ -508,7 +509,7 @@ namespace temperature_gradient_system
                 {
                    TUp(1);
                 }
-
+                PID_1 = new PIDControl(3, 0.1, 0.5, desT_1);
                 isUp_1 = true;
             }
         }
@@ -530,17 +531,17 @@ namespace temperature_gradient_system
 
         private void button5_Click_1(object sender, EventArgs e)
         {
-            TUp(1);
+            TUp(2);
         }
 
         private void button6_Click_1(object sender, EventArgs e)
         {
-            TDown(1);
+            TDown(2);
         }
 
         private void button7_Click_1(object sender, EventArgs e)
         {
-            TNature(1);
+            TNature(2);
         }
 
         private void timer3_Tick(object sender, EventArgs e)
@@ -594,7 +595,7 @@ namespace temperature_gradient_system
                 {
                     TUp(2);
                 }
-
+                PID_2 = new PIDControl(3, 0.1, 0.5, desT_2);
                 isUp_2 = true;
             }
         }
@@ -620,7 +621,7 @@ namespace temperature_gradient_system
             double temperatureValue_4 = rawData_4 * a_4 + b_4;
 
             lblRawValue_4.Text = rawData_4.ToString();
-            lblT_3.Text = temperatureValue_4.ToString("00.00");
+            lblT_4.Text = temperatureValue_4.ToString("00.00");
 
 
             if (temperatureValue_1 > 60 || temperatureValue_1 < 0)
@@ -711,6 +712,26 @@ namespace temperature_gradient_system
             }
         }
 
+        private void cbChooseT1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (this.cbChooseT1.Checked)
+            {
+                
+                a_2 = a_1;
+                b_2 = b_1;
+                a_3 = a_1;
+                b_3 = b_1;
+                a_4 = a_1;
+                b_4 = b_1;
+            }
+        }
+
+        private void btnStop_Click(object sender, EventArgs e)
+        {
+            TNature(2);
+            TNature(1);
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
             
@@ -785,7 +806,8 @@ namespace temperature_gradient_system
                 this.btnStart.Text = "Start";
 
                 ifStart = false;
-
+                TNature(0);
+                TNature(1);
                 tControl_1.Stop();
                 tControl_2.Stop();
             }
@@ -813,10 +835,10 @@ namespace temperature_gradient_system
             this.lblTFitValue_3.Text = rawData_3.ToString();
             this.lblTFitValue_4.Text = rawData_4.ToString();
 
-            //this.lblT_1.Text = (double.Parse(rawData_1.ToString()) * a_1 + b_1).ToString();
-            //this.lblT_2.Text = (double.Parse(rawData_2.ToString()) * a_2 + b_2).ToString();
-            //this.lblT_3.Text = (double.Parse(rawData_3.ToString()) * a_3 + b_3).ToString();
-            //this.lblT_4.Text = (double.Parse(rawData_4.ToString()) * a_4 + b_4).ToString();
+            this.lblTFitTemperature_1.Text = (double.Parse(rawData_1.ToString()) * a_1 + b_1).ToString();
+            this.lblTFitTemperature_2.Text = (double.Parse(rawData_2.ToString()) * a_2 + b_2).ToString();
+            this.lblTFitTemperature_3.Text = (double.Parse(rawData_3.ToString()) * a_3 + b_3).ToString();
+            this.lblTFitTemperature_4.Text = (double.Parse(rawData_4.ToString()) * a_4 + b_4).ToString();
         }
     }
 }
