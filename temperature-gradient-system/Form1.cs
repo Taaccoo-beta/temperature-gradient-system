@@ -147,10 +147,10 @@ namespace temperature_gradient_system
             lsm_2.getParameter(ref tp.a2, ref tp.b2);
             //tp.b1 = -tp.b1;
 
-            tp.a1 = a_1;
-            tp.b1 = b_1;
             tp.a3 = a_3;
             tp.b3 = b_3;
+            tp.a1 = a_1;
+            tp.b1 = b_1;
             tp.a4 = a_4;
             tp.b4 = b_4;
 
