@@ -544,9 +544,52 @@ namespace temperature_gradient_system
             TNature(2);
         }
 
+        private int testTimeCount;
+        private int testSpikeCount;
+        private int testCount;
+        private bool countSwitch;
+       
+        
         private void timer3_Tick(object sender, EventArgs e)
         {
+            int rawData_1 = int.Parse(pc.AnalogInput(0));
+            this.lblTestTValue.Text = (double.Parse(rawData_1.ToString()) * a_1 + b_1).ToString();
+            countSwitch = true;
+            if (testCount < testSpikeCount)
+            {
 
+                if (cbTestUpOrDown.Checked)
+                {
+                    TDown(1);
+                }
+                else
+                {
+                    TUp(1);
+                }
+
+
+            }
+
+
+            else if (testCount < testTimeCount & testCount >= testSpikeCount)
+            {
+                TNature(1);
+
+            }
+
+            else
+            {
+                countSwitch = false;
+                testCount = 0;
+            }
+
+            if (countSwitch)
+            {
+                testCount++;
+            }
+
+            
+            
         }
 
         private void label11_Click(object sender, EventArgs e)
@@ -732,6 +775,48 @@ namespace temperature_gradient_system
             TNature(1);
         }
 
+        private bool ifTestStartOpen = false;
+
+        private void btnTestStart_Click(object sender, EventArgs e)
+        {
+            if (ifTestStartOpen)
+            {
+                ifTestStartOpen = false;
+                this.btnTestStart.Text = "Start";
+                this.timer3.Stop();
+            }
+            else
+            {
+                ifTestStartOpen = true;
+                this.btnTestStart.Text = "Stop";
+                this.testTimeCount = int.Parse(this.tbTestTime.Text);
+                this.testSpikeCount = int.Parse(this.tbTestSpikeTime.Text);
+                testCount = 0;
+                this.timer3.Interval = 100;
+                this.timer3.Start();
+            }
+        }
+
+        private void cbTestUpOrDown_CheckedChanged(object sender, EventArgs e)
+        {
+
+            if (cbTestUpOrDown.Checked)
+            {
+                this.cbTestUpOrDown.Text = "Down";
+            }
+            else
+            {
+                this.cbTestUpOrDown.Text = "Up";
+            }
+
+
+        }
+
+        private void btnTestClear_Click(object sender, EventArgs e)
+        {
+            TNature(1);
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
             
@@ -754,7 +839,8 @@ namespace temperature_gradient_system
             pc.AnalogPortConfigurationIn();
             pc.DigitalConfigurationOut();
 
-
+            TNature(1);
+            TNature(2);
             CoreSerialize cs = new CoreSerialize();
             TParameters dataT = new TParameters();
             try
@@ -794,10 +880,12 @@ namespace temperature_gradient_system
 
         }
 
+
         private void tFitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             
         }
+
 
         private void btnStart_Click(object sender, EventArgs e)
         {
@@ -824,6 +912,7 @@ namespace temperature_gradient_system
             }
         }
 
+
         private void timer1_Tick(object sender, EventArgs e)
         {
             int rawData_1 = int.Parse(pc.AnalogInput(0));
@@ -840,5 +929,6 @@ namespace temperature_gradient_system
             this.lblTFitTemperature_3.Text = (double.Parse(rawData_3.ToString()) * a_3 + b_3).ToString();
             this.lblTFitTemperature_4.Text = (double.Parse(rawData_4.ToString()) * a_4 + b_4).ToString();
         }
+
     }
 }

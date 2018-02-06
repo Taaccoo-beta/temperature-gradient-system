@@ -36,24 +36,28 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.gbTFit_1 = new System.Windows.Forms.GroupBox();
+            this.lblTFitTemperature_1 = new System.Windows.Forms.Label();
             this.btnSet_1 = new System.Windows.Forms.Button();
             this.tbInputCurrentT_1 = new System.Windows.Forms.TextBox();
             this.lblAddNumber_1 = new System.Windows.Forms.Label();
             this.btnAdd_1 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.lblTFitTemperature_2 = new System.Windows.Forms.Label();
             this.btnSet_2 = new System.Windows.Forms.Button();
             this.tbInputCurrentT_2 = new System.Windows.Forms.TextBox();
             this.lblAddNumber_2 = new System.Windows.Forms.Label();
             this.btnAdd_2 = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.lblTFitTemperature_3 = new System.Windows.Forms.Label();
             this.btnSet_3 = new System.Windows.Forms.Button();
             this.tbInputCurrentT_3 = new System.Windows.Forms.TextBox();
             this.lblAddNumber_3 = new System.Windows.Forms.Label();
             this.btnAdd_3 = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.lblTFitTemperature_4 = new System.Windows.Forms.Label();
             this.btnSet_4 = new System.Windows.Forms.Button();
             this.tbInputCurrentT_4 = new System.Windows.Forms.TextBox();
             this.lblAddNumber_4 = new System.Windows.Forms.Label();
@@ -97,13 +101,18 @@
             this.lblTFitValue_2 = new System.Windows.Forms.Label();
             this.lblTFitValue_1 = new System.Windows.Forms.Label();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.cbTestUpOrDown = new System.Windows.Forms.CheckBox();
+            this.btnTestStart = new System.Windows.Forms.Button();
+            this.lblTestTValue = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.tbTestSpikeTime = new System.Windows.Forms.MaskedTextBox();
+            this.tbTestTime = new System.Windows.Forms.MaskedTextBox();
             this.tControl_1 = new System.Windows.Forms.Timer(this.components);
             this.timer3 = new System.Windows.Forms.Timer(this.components);
             this.tControl_2 = new System.Windows.Forms.Timer(this.components);
-            this.lblTFitTemperature_1 = new System.Windows.Forms.Label();
-            this.lblTFitTemperature_2 = new System.Windows.Forms.Label();
-            this.lblTFitTemperature_3 = new System.Windows.Forms.Label();
-            this.lblTFitTemperature_4 = new System.Windows.Forms.Label();
+            this.btnTestClear = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.gbTFit_1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -115,6 +124,7 @@
             this.groupBox6.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            this.tabPage3.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -170,6 +180,16 @@
             this.gbTFit_1.TabIndex = 8;
             this.gbTFit_1.TabStop = false;
             this.gbTFit_1.Text = "TFit-1";
+            // 
+            // lblTFitTemperature_1
+            // 
+            this.lblTFitTemperature_1.AutoSize = true;
+            this.lblTFitTemperature_1.Location = new System.Drawing.Point(68, 35);
+            this.lblTFitTemperature_1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblTFitTemperature_1.Name = "lblTFitTemperature_1";
+            this.lblTFitTemperature_1.Size = new System.Drawing.Size(35, 13);
+            this.lblTFitTemperature_1.TabIndex = 12;
+            this.lblTFitTemperature_1.Text = "NULL";
             // 
             // btnSet_1
             // 
@@ -237,6 +257,16 @@
             this.groupBox2.TabIndex = 9;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "TFit-1";
+            // 
+            // lblTFitTemperature_2
+            // 
+            this.lblTFitTemperature_2.AutoSize = true;
+            this.lblTFitTemperature_2.Location = new System.Drawing.Point(72, 35);
+            this.lblTFitTemperature_2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblTFitTemperature_2.Name = "lblTFitTemperature_2";
+            this.lblTFitTemperature_2.Size = new System.Drawing.Size(35, 13);
+            this.lblTFitTemperature_2.TabIndex = 13;
+            this.lblTFitTemperature_2.Text = "NULL";
             // 
             // btnSet_2
             // 
@@ -306,6 +336,16 @@
             this.groupBox3.Text = "TFit-1";
             this.groupBox3.Enter += new System.EventHandler(this.groupBox3_Enter);
             // 
+            // lblTFitTemperature_3
+            // 
+            this.lblTFitTemperature_3.AutoSize = true;
+            this.lblTFitTemperature_3.Location = new System.Drawing.Point(73, 35);
+            this.lblTFitTemperature_3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblTFitTemperature_3.Name = "lblTFitTemperature_3";
+            this.lblTFitTemperature_3.Size = new System.Drawing.Size(35, 13);
+            this.lblTFitTemperature_3.TabIndex = 14;
+            this.lblTFitTemperature_3.Text = "NULL";
+            // 
             // btnSet_3
             // 
             this.btnSet_3.Location = new System.Drawing.Point(56, 152);
@@ -372,6 +412,16 @@
             this.groupBox4.TabIndex = 11;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "TFit-1";
+            // 
+            // lblTFitTemperature_4
+            // 
+            this.lblTFitTemperature_4.AutoSize = true;
+            this.lblTFitTemperature_4.Location = new System.Drawing.Point(72, 35);
+            this.lblTFitTemperature_4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblTFitTemperature_4.Name = "lblTFitTemperature_4";
+            this.lblTFitTemperature_4.Size = new System.Drawing.Size(35, 13);
+            this.lblTFitTemperature_4.TabIndex = 15;
+            this.lblTFitTemperature_4.Text = "NULL";
             // 
             // btnSet_4
             // 
@@ -849,6 +899,15 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.btnTestClear);
+            this.tabPage3.Controls.Add(this.cbTestUpOrDown);
+            this.tabPage3.Controls.Add(this.btnTestStart);
+            this.tabPage3.Controls.Add(this.lblTestTValue);
+            this.tabPage3.Controls.Add(this.label9);
+            this.tabPage3.Controls.Add(this.label6);
+            this.tabPage3.Controls.Add(this.label4);
+            this.tabPage3.Controls.Add(this.tbTestSpikeTime);
+            this.tabPage3.Controls.Add(this.tbTestTime);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.tabPage3.Name = "tabPage3";
@@ -857,6 +916,77 @@
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Test";
             this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // cbTestUpOrDown
+            // 
+            this.cbTestUpOrDown.AutoSize = true;
+            this.cbTestUpOrDown.Location = new System.Drawing.Point(346, 231);
+            this.cbTestUpOrDown.Name = "cbTestUpOrDown";
+            this.cbTestUpOrDown.Size = new System.Drawing.Size(40, 17);
+            this.cbTestUpOrDown.TabIndex = 7;
+            this.cbTestUpOrDown.Text = "Up";
+            this.cbTestUpOrDown.UseVisualStyleBackColor = true;
+            this.cbTestUpOrDown.CheckedChanged += new System.EventHandler(this.cbTestUpOrDown_CheckedChanged);
+            // 
+            // btnTestStart
+            // 
+            this.btnTestStart.Location = new System.Drawing.Point(346, 274);
+            this.btnTestStart.Name = "btnTestStart";
+            this.btnTestStart.Size = new System.Drawing.Size(75, 23);
+            this.btnTestStart.TabIndex = 6;
+            this.btnTestStart.Text = "Start";
+            this.btnTestStart.UseVisualStyleBackColor = true;
+            this.btnTestStart.Click += new System.EventHandler(this.btnTestStart_Click);
+            // 
+            // lblTestTValue
+            // 
+            this.lblTestTValue.AutoSize = true;
+            this.lblTestTValue.Location = new System.Drawing.Point(343, 189);
+            this.lblTestTValue.Name = "lblTestTValue";
+            this.lblTestTValue.Size = new System.Drawing.Size(35, 13);
+            this.lblTestTValue.TabIndex = 5;
+            this.lblTestTValue.Text = "NULL";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(215, 189);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(104, 13);
+            this.label9.TabIndex = 4;
+            this.label9.Text = "CurrentTemperature:";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(245, 136);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(74, 13);
+            this.label6.TabIndex = 3;
+            this.label6.Text = "SpikeNumber:";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(286, 83);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(33, 13);
+            this.label4.TabIndex = 2;
+            this.label4.Text = "Time:";
+            // 
+            // tbTestSpikeTime
+            // 
+            this.tbTestSpikeTime.Location = new System.Drawing.Point(346, 129);
+            this.tbTestSpikeTime.Name = "tbTestSpikeTime";
+            this.tbTestSpikeTime.Size = new System.Drawing.Size(104, 20);
+            this.tbTestSpikeTime.TabIndex = 1;
+            // 
+            // tbTestTime
+            // 
+            this.tbTestTime.Location = new System.Drawing.Point(346, 80);
+            this.tbTestTime.Name = "tbTestTime";
+            this.tbTestTime.Size = new System.Drawing.Size(104, 20);
+            this.tbTestTime.TabIndex = 0;
             // 
             // tControl_1
             // 
@@ -870,45 +1000,15 @@
             // 
             this.tControl_2.Tick += new System.EventHandler(this.tControl_2_Tick);
             // 
-            // lblTFitTemperature_1
+            // btnTestClear
             // 
-            this.lblTFitTemperature_1.AutoSize = true;
-            this.lblTFitTemperature_1.Location = new System.Drawing.Point(68, 35);
-            this.lblTFitTemperature_1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblTFitTemperature_1.Name = "lblTFitTemperature_1";
-            this.lblTFitTemperature_1.Size = new System.Drawing.Size(35, 13);
-            this.lblTFitTemperature_1.TabIndex = 12;
-            this.lblTFitTemperature_1.Text = "NULL";
-            // 
-            // lblTFitTemperature_2
-            // 
-            this.lblTFitTemperature_2.AutoSize = true;
-            this.lblTFitTemperature_2.Location = new System.Drawing.Point(72, 35);
-            this.lblTFitTemperature_2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblTFitTemperature_2.Name = "lblTFitTemperature_2";
-            this.lblTFitTemperature_2.Size = new System.Drawing.Size(35, 13);
-            this.lblTFitTemperature_2.TabIndex = 13;
-            this.lblTFitTemperature_2.Text = "NULL";
-            // 
-            // lblTFitTemperature_3
-            // 
-            this.lblTFitTemperature_3.AutoSize = true;
-            this.lblTFitTemperature_3.Location = new System.Drawing.Point(73, 35);
-            this.lblTFitTemperature_3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblTFitTemperature_3.Name = "lblTFitTemperature_3";
-            this.lblTFitTemperature_3.Size = new System.Drawing.Size(35, 13);
-            this.lblTFitTemperature_3.TabIndex = 14;
-            this.lblTFitTemperature_3.Text = "NULL";
-            // 
-            // lblTFitTemperature_4
-            // 
-            this.lblTFitTemperature_4.AutoSize = true;
-            this.lblTFitTemperature_4.Location = new System.Drawing.Point(72, 35);
-            this.lblTFitTemperature_4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblTFitTemperature_4.Name = "lblTFitTemperature_4";
-            this.lblTFitTemperature_4.Size = new System.Drawing.Size(35, 13);
-            this.lblTFitTemperature_4.TabIndex = 15;
-            this.lblTFitTemperature_4.Text = "NULL";
+            this.btnTestClear.Location = new System.Drawing.Point(475, 274);
+            this.btnTestClear.Name = "btnTestClear";
+            this.btnTestClear.Size = new System.Drawing.Size(75, 23);
+            this.btnTestClear.TabIndex = 8;
+            this.btnTestClear.Text = "Clear";
+            this.btnTestClear.UseVisualStyleBackColor = true;
+            this.btnTestClear.Click += new System.EventHandler(this.btnTestClear_Click);
             // 
             // Form1
             // 
@@ -941,6 +1041,8 @@
             this.groupBox5.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
+            this.tabPage3.ResumeLayout(false);
+            this.tabPage3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1023,6 +1125,15 @@
         private System.Windows.Forms.Label lblTFitTemperature_2;
         private System.Windows.Forms.Label lblTFitTemperature_3;
         private System.Windows.Forms.Label lblTFitTemperature_4;
+        private System.Windows.Forms.Button btnTestStart;
+        private System.Windows.Forms.Label lblTestTValue;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.MaskedTextBox tbTestSpikeTime;
+        private System.Windows.Forms.MaskedTextBox tbTestTime;
+        private System.Windows.Forms.CheckBox cbTestUpOrDown;
+        private System.Windows.Forms.Button btnTestClear;
     }
 }
 
