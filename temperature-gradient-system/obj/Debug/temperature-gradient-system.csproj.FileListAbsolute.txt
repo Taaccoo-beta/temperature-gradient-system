@@ -25,3 +25,4 @@ F:\github\temperature-gradient-system\temperature-gradient-system\temperature-gr
 F:\github\temperature-gradient-system\temperature-gradient-system\temperature-gradient-system\bin\Debug\temperature-gradient-system.exe
 F:\github\temperature-gradient-system\temperature-gradient-system\temperature-gradient-system\bin\Debug\temperature-gradient-system.pdb
 F:\github\temperature-gradient-system\temperature-gradient-system\temperature-gradient-system\bin\Debug\MccDaq.dll
+F:\github\temperature-gradient-system\temperature-gradient-system\obj\Debug\temperature-gradient-system.csprojResolveAssemblyReference.cache

@@ -386,28 +386,34 @@ namespace temperature_gradient_system
 
             if (isUp_1 == true)
             {
-                if (Math.Abs(desT_1 - temperatureValue_1) < 10 && isStartPID_1 == true)
+                if (isStartPID_1 == true)
                 {
                     startPID_1 = true;
                     isStartPID_1 = false;
 
                     result_1 = PID_1.PIDCalcDirect(temperatureValue_1);
 
+                    
+
+
+                    FirstProporation_1 = Convert.ToInt32(result_1);
+                    proporation_1 = Convert.ToInt32(result_1);
+                    
+
+
                     if (result_1 > 0)
                     {
 
                         TUp(1);
+                        proporation_1 = PID_1.ConvertAccordToPropotation(proporation_1, 7, FirstProporation_1);
 
                     }
                     else
                     {
                         TDown(1);
+                        proporation_1 = PID_1.ConvertAccordToPropotation(proporation_1, 10, FirstProporation_1);
                     }
 
-
-                    FirstProporation_1 = Convert.ToInt32(result_1);
-                    proporation_1 = Convert.ToInt32(result_1);
-                    proporation_1 = PID_1.ConvertAccordToPropotation(proporation_1, circle, FirstProporation_1);
 
                     PID_Count_1 = 0;
                     
@@ -434,7 +440,7 @@ namespace temperature_gradient_system
 
                 if (startPID_1 == true && PID_Count_1 == circle)
                 {
-                    result_1 = PID_1.PIDCalcDirect(temperatureValue_1);
+                    result_1 = PID_1.PIDCalcDirect(temperatureValue_3);
 
                     proporation_1 = Convert.ToInt32(result_1);
                     PID_Count_1 = 0;
@@ -445,14 +451,16 @@ namespace temperature_gradient_system
                     {
 
                         TUp(1);
+                        proporation_1 = PID_1.ConvertAccordToPropotation(proporation_1, 7, FirstProporation_1);
 
                     }
                     else
                     {
                         TDown(1);
+                        proporation_1 = PID_1.ConvertAccordToPropotation(proporation_1, 10, FirstProporation_1);
                     }
 
-                    proporation_1 = PID_1.ConvertAccordToPropotation(proporation_1, circle, FirstProporation_1);
+                    
 
                 }
 
@@ -681,28 +689,30 @@ namespace temperature_gradient_system
 
             if (isUp_2 == true)
             {
-                if (Math.Abs(desT_2 - temperatureValue_2) < 10 && isStartPID_2 == true)
+                if (isStartPID_2 == true)
                 {
                     startPID_2 = true;
                     isStartPID_2 = false;
 
-                    result_2 = PID_2.PIDCalcDirect(temperatureValue_2);
-
+                    result_2 = PID_2.PIDCalcDirect(temperatureValue_4);
+                    FirstProporation_2 = Convert.ToInt32(result_2);
+                    proporation_2 = Convert.ToInt32(result_2);
                     if (result_2 > 0)
                     {
 
                         TUp(2);
+                        proporation_2 = PID_2.ConvertAccordToPropotation(proporation_2, 7, FirstProporation_2);
 
                     }
                     else
                     {
                         TDown(2);
+                        proporation_2 = PID_2.ConvertAccordToPropotation(proporation_2, 10, FirstProporation_2);
                     }
 
 
-                    FirstProporation_2 = Convert.ToInt32(result_2);
-                    proporation_2 = Convert.ToInt32(result_2);
-                    proporation_2 = PID_2.ConvertAccordToPropotation(proporation_2, circle, FirstProporation_2);
+                    
+                    
 
                     PID_Count_2 = 0;
 
@@ -729,7 +739,7 @@ namespace temperature_gradient_system
 
                 if (startPID_2 == true && PID_Count_2 == circle)
                 {
-                    result_2 = PID_2.PIDCalcDirect(temperatureValue_2);
+                    result_2 = PID_2.PIDCalcDirect(temperatureValue_4);
 
                     proporation_2 = Convert.ToInt32(result_2);
                     PID_Count_2 = 0;
@@ -740,14 +750,16 @@ namespace temperature_gradient_system
                     {
 
                         TUp(2);
+                        proporation_2 = PID_2.ConvertAccordToPropotation(proporation_2, 7, FirstProporation_2);
 
                     }
                     else
                     {
                         TDown(2);
+                        proporation_2 = PID_2.ConvertAccordToPropotation(proporation_2, 10, FirstProporation_2);
                     }
 
-                    proporation_2 = PID_2.ConvertAccordToPropotation(proporation_2, circle, FirstProporation_2);
+                    
 
                 }
 
@@ -905,8 +917,8 @@ namespace temperature_gradient_system
                 ifStart = true;
                 
                 
-                tControl_1.Interval = 10;
-                tControl_2.Interval = 10;
+                tControl_1.Interval = 100;
+                tControl_2.Interval = 100;
                 tControl_2.Start();
                 tControl_1.Start();
             }
