@@ -354,14 +354,7 @@ namespace temperature_gradient_system
              * time get module
              */
 
-            int RawValue;
-            int rawData_1 = int.Parse(pc.AnalogInput(0));
             
-           
-            double temperatureValue_1 = rawData_1 * a_1 + b_1;
-
-            lblRawValue_1.Text = rawData_1.ToString();
-            lblT_1.Text = temperatureValue_1.ToString("00.00");
 
             int rawData_3 = int.Parse(pc.AnalogInput(2));
 
@@ -372,12 +365,12 @@ namespace temperature_gradient_system
             lblT_3.Text = temperatureValue_3.ToString("00.00");
 
 
-            if (temperatureValue_1 > 60 || temperatureValue_1 < 0)
-            {
-                TNature(1);
-                tControl_1.Stop();
-                MessageBox.Show("Temperature Out");
-            }
+            //if (temperatureValue_1 > 60 || temperatureValue_1 < 0)
+            //{
+            //    TNature(1);
+            //    tControl_1.Stop();
+            //    MessageBox.Show("Temperature Out");
+            //}
 
             /*
              *  Up and Down control module
@@ -391,7 +384,7 @@ namespace temperature_gradient_system
                     startPID_1 = true;
                     isStartPID_1 = false;
 
-                    result_1 = PID_1.PIDCalcDirect(temperatureValue_1);
+                    result_1 = PID_1.PIDCalcDirect(temperatureValue_3);
 
                     
 
@@ -405,13 +398,13 @@ namespace temperature_gradient_system
                     {
 
                         TUp(1);
-                        proporation_1 = PID_1.ConvertAccordToPropotation(proporation_1, 7, FirstProporation_1);
+                        proporation_1 = PID_1.ConvertAccordToPropotation(proporation_1, 2, FirstProporation_1);
 
                     }
                     else
                     {
                         TDown(1);
-                        proporation_1 = PID_1.ConvertAccordToPropotation(proporation_1, 10, FirstProporation_1);
+                        proporation_1 = PID_1.ConvertAccordToPropotation(proporation_1, 7, FirstProporation_1);
                     }
 
 
@@ -451,13 +444,13 @@ namespace temperature_gradient_system
                     {
 
                         TUp(1);
-                        proporation_1 = PID_1.ConvertAccordToPropotation(proporation_1, 7, FirstProporation_1);
+                        proporation_1 = PID_1.ConvertAccordToPropotation(proporation_1, 2, FirstProporation_1);
 
                     }
                     else
                     {
                         TDown(1);
-                        proporation_1 = PID_1.ConvertAccordToPropotation(proporation_1, 10, FirstProporation_1);
+                        proporation_1 = PID_1.ConvertAccordToPropotation(proporation_1,7, FirstProporation_1);
                     }
 
                     
@@ -468,7 +461,7 @@ namespace temperature_gradient_system
             }
 
 
-            
+            System.IO.File.AppendAllText("e:\\LowTemperature.txt",temperatureValue_3.ToString("00.00")+ "\r\n");
 
 
         }
@@ -483,7 +476,7 @@ namespace temperature_gradient_system
                 this.btnStart_1.Text = "Start";
 
                 ifStart_1 = false;
-                this.tControl_1.Interval = 10;
+                this.tControl_2.Interval = 10;
 
                 TNature(1);
 
@@ -517,7 +510,7 @@ namespace temperature_gradient_system
                 {
                    TUp(1);
                 }
-                PID_1 = new PIDControl(3, 0.1, 0.5, desT_1);
+                PID_1 = new PIDControl(4, 0.1, 0.5, desT_1);
                 isUp_1 = true;
             }
         }
@@ -612,7 +605,7 @@ namespace temperature_gradient_system
                 this.btnStart_2.Text = "Start";
 
                 ifStart_2 = false;
-                this.tControl_2.Interval = 10;
+                this.tControl_1.Interval = 10;
 
                 TNature(2);
 
@@ -646,9 +639,11 @@ namespace temperature_gradient_system
                 {
                     TUp(2);
                 }
-                PID_2 = new PIDControl(3, 0.1, 0.5, desT_2);
+                PID_2 = new PIDControl(1, 0.05, 0.5, desT_2);
                 isUp_2 = true;
             }
+
+
         }
 
         private void tControl_2_Tick(object sender, EventArgs e)
@@ -657,14 +652,7 @@ namespace temperature_gradient_system
             * time get module
             */
 
-            int RawValue;
-            int rawData_2 = int.Parse(pc.AnalogInput(1));
-
-
-            double temperatureValue_2 = rawData_2 * a_2 + b_2;
-
-            lblRawValue_2.Text = rawData_2.ToString();
-            lblT_2.Text = temperatureValue_2.ToString("00.00");
+           
 
             int rawData_4 = int.Parse(pc.AnalogInput(3));
 
@@ -675,12 +663,12 @@ namespace temperature_gradient_system
             lblT_4.Text = temperatureValue_4.ToString("00.00");
 
 
-            if (temperatureValue_1 > 60 || temperatureValue_1 < 0)
-            {
-                TNature(2);
-                tControl_2.Stop();
-                MessageBox.Show("Temperature Out");
-            }
+            //if (temperatureValue_1 > 60 || temperatureValue_1 < 0)
+            //{
+            //    TNature(2);
+            //    tControl_2.Stop();
+            //    MessageBox.Show("Temperature Out");
+            //}
 
             /*
              *  Up and Down control module
@@ -701,13 +689,13 @@ namespace temperature_gradient_system
                     {
 
                         TUp(2);
-                        proporation_2 = PID_2.ConvertAccordToPropotation(proporation_2, 7, FirstProporation_2);
+                        proporation_2 = PID_2.ConvertAccordToPropotation(proporation_2, 2, FirstProporation_2);
 
                     }
                     else
                     {
                         TDown(2);
-                        proporation_2 = PID_2.ConvertAccordToPropotation(proporation_2, 10, FirstProporation_2);
+                        proporation_2 = PID_2.ConvertAccordToPropotation(proporation_2, 6, FirstProporation_2);
                     }
 
 
@@ -750,13 +738,13 @@ namespace temperature_gradient_system
                     {
 
                         TUp(2);
-                        proporation_2 = PID_2.ConvertAccordToPropotation(proporation_2, 7, FirstProporation_2);
+                        proporation_2 = PID_2.ConvertAccordToPropotation(proporation_2,2, FirstProporation_2);
 
                     }
                     else
                     {
                         TDown(2);
-                        proporation_2 = PID_2.ConvertAccordToPropotation(proporation_2, 10, FirstProporation_2);
+                        proporation_2 = PID_2.ConvertAccordToPropotation(proporation_2, 6, FirstProporation_2);
                     }
 
                     
@@ -765,6 +753,7 @@ namespace temperature_gradient_system
 
 
             }
+            System.IO.File.AppendAllText("e:\\HighTemperature.txt", temperatureValue_4.ToString("00.00")  + "\r\n");
         }
 
         private void cbChooseT1_CheckedChanged(object sender, EventArgs e)
@@ -906,10 +895,10 @@ namespace temperature_gradient_system
                 this.btnStart.Text = "Start";
 
                 ifStart = false;
-                TNature(0);
                 TNature(1);
-                tControl_1.Stop();
+                TNature(2);
                 tControl_2.Stop();
+                tControl_1.Stop();
             }
             else
             {
@@ -917,10 +906,10 @@ namespace temperature_gradient_system
                 ifStart = true;
                 
                 
-                tControl_1.Interval = 100;
                 tControl_2.Interval = 100;
-                tControl_2.Start();
+                tControl_1.Interval = 100;
                 tControl_1.Start();
+                tControl_2.Start();
             }
         }
 
